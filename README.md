@@ -78,59 +78,42 @@ Client-server chat applications are foundational to real-time communication over
 ## Client Program:
 ```
 import socket
-s = socket.socket()
-host = input(str('Enter hostname or host IP : '))
-port= 8080
-s.connect((host, port))
-print('Connected to chat server')
-while 1:
-    incoming_message = s.recv(1024)
-    incoming_message =incoming_message.decode() 
-    print(' Server : ',incoming_message) 
-    print()
-    message = input(str('>> '))
-    message =message.encode()
-    s.send(message)
-    print('Sent')
-    print()
+from datetime import datetime
+s=socket.socket()
+s.bind(('localhost',8000))
+s.listen(5)
+c,addr=s.accept()
+print("Client Address : ",addr)
+now = datetime.now()
+c.send(now.strftime("%d/%m/%Y %H:%M:%S").encode())
+ack=c.recv(1024).decode()
+if ack:
+    print(ack)
+c.close()
 ```
 
 ## Server Program:
 ```
 import socket
-s = socket.socket()
-host = socket.gethostname()
-print(' Server will start on host : ',host) 
-port = 8080
-s.bind((host, port))
-print()
-print('Waiting for connection')
-print()
-s.listen(1)
-conn, addr = s.accept()
-print(addr, ' Has connected to the server') 
-print()
-while 1:
-    message =input(str('>> '))
-    message =message.encode()
-    conn.send(message) 
-    print('Sent')
-    print()
-    incoming_message = conn.recv(1024)
-    incoming_message = incoming_message.decode()
-    print(' Client : ',incoming_message) 
-    print()
+s=socket.socket()
+s.connect(('localhost',8000))
+print(s.getsockname())
+print(s.recv(1024).decode())
+s.send("acknowledgement recived from the server".encode())
 ```
 
 ## Output:
 
+<img width="1506" height="928" alt="image" src="https://github.com/user-attachments/assets/4aaf894c-e258-415c-b7c0-4d7deea0a40b" />
 
-<img width="1626" height="982" alt="image" src="https://github.com/user-attachments/assets/1fcc328f-cef8-4fb4-940e-63ca07084dba" />
 
-<img width="1710" height="972" alt="image" src="https://github.com/user-attachments/assets/41a2d8cf-9f7b-4f6e-a0a7-760fbe98eb6b" />
+
+<img width="1530" height="887" alt="image" src="https://github.com/user-attachments/assets/fc2a2dc7-5a4b-4331-8ff3-2565d0b556b1" />
+
+
 
 
 ## Result:
 
-Thus the study on Client Server Chat Applications has been performed
-
+Thus, the program to implement socket programming date and time display from client to server
+using TCP Sockets was successfully executed.
